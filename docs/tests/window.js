@@ -271,4 +271,6 @@
 		</div>
 	`)
 
+	window.reportTest && window.reportTest('window', { hash, fingerprintMatch, reportedUserAgent })
+
 })()

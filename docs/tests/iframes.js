@@ -606,4 +606,29 @@
 	</div>
 `)
 
+	window.reportTest && window.reportTest('iframes', {
+		windowFrame,
+		iframeContentWindow,
+		iframeContentWindowNested,
+		iframeWindow,
+		deadIframeWindow,
+		rejectedIframe,
+		fragmentIframe,
+		sameSourceIframe,
+		valid: {
+			passed: valid.passed,
+			contentWindowErrors: valid.contentWindowErrors,
+			contentWindowProxy: valid.contentWindowProxy,
+			appendChildErrors: valid.appendChildErrors,
+			uaReported: valid.uaReported,
+			verReported: valid.verReported,
+			uaRestored: valid.uaRestored,
+			verRestored: valid.verRestored,
+			features: valid.features,
+			platform: valid.platform,
+			canvas: valid.canvas,
+			connection: valid.connection
+		}
+	})
+
 })()

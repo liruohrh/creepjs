@@ -466,4 +466,41 @@
 		</div>
 	</div>
 `)
+
+	window.reportTest && window.reportTest('machine', {
+		userAgentPlatform: res,
+		system,
+		platform,
+		device: res.parsed,
+		core: res.core,
+		voiceSystem,
+		maxTouchPoints,
+		cssTouch,
+		deviceMemory,
+		hardwareConcurrency,
+		gpu,
+		lies: {
+			platformLie: res.platformLie,
+			touchLie: res.touchLie,
+			cssTouchLie,
+			anyPointerLie,
+			voiceSystemLie,
+			memoryLie,
+			iosMemoryLie,
+			coresLie,
+			gpuLie,
+			iosGPULie
+		},
+		hash: hashMini({
+			userAgentPlatform: res,
+			system,
+			platform,
+			voiceSystem,
+			maxTouchPoints,
+			cssTouch,
+			deviceMemory,
+			hardwareConcurrency,
+			gpu
+		})
+	})
 })()

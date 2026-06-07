@@ -198,4 +198,6 @@ patch(document.getElementById('emoji-container'), html`
 		</div>
 	</div>
 `)
+
+window.reportTest && window.reportTest('emojis', { hash: $hash, fingerprint, unique: [...unique], emojiRects })
 })()

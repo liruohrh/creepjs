@@ -681,4 +681,15 @@ patch(el, html`
 	</div>
 </div>
 `)
+
+	window.reportTest && window.reportTest('workers', {
+		windowHash,
+		dedicatedInlineHash,
+		sharedInlineHash,
+		serviceHash,
+		windowScope,
+		dedicatedWorkerInline,
+		sharedWorkerInline,
+		serviceWorker,
+	})
 })()

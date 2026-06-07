@@ -212,7 +212,7 @@ export async function getStatus(): Promise<Status> {
   }
 }
 
-export function statusHTML(status: Status) {
+export function statusHTML(status?: Status) {
   if (!status) {
     return `
       <div class="col-four">

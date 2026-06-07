@@ -1159,4 +1159,17 @@
 		</div>
 	`)
 
+	window.reportTest && window.reportTest('fonts', {
+		fingerprint,
+		supportedFontList,
+		textMetricsFonts,
+		textMetricsFontsOffscreen,
+		svgFonts,
+		rectFonts,
+		pixelFonts,
+		lengthFonts,
+		fontFaceSetFonts,
+		fontFaceLoadFonts
+	})
+
 })()
