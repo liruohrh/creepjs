@@ -275,4 +275,6 @@ patch(document.getElementById('fingerprint-data'), html`
 	</div>
 `)
 
+window.reportTest && window.reportTest('extensions', { activeExtensions, extensionLibrary })
+
 })()

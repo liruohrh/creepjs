@@ -264,4 +264,35 @@
 	</div>
 `)
 
+	window.reportTest && window.reportTest('screen', {
+		hash: hashMini({ mediaWidth, mediaHeight }),
+		mediaWidth,
+		mediaHeight,
+		matchMediaWidth,
+		matchMediaHeight,
+		width,
+		height,
+		availWidth,
+		availHeight,
+		colorDepth,
+		pixelDepth,
+		devicePixelRatio,
+		clientWidth,
+		clientHeight,
+		innerWidth,
+		innerHeight,
+		outerWidth,
+		outerHeight,
+		viewportWidth,
+		viewportHeight,
+		domRectViewport,
+		viewport,
+		viewportAspectRatio,
+		deviceAspectRatio,
+		deviceScreen,
+		orientation,
+		orientationType,
+		displayMode,
+	})
+
 })()

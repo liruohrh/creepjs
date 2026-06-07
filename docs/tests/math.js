@@ -451,4 +451,6 @@
 		</div>
 	</div>
 `)
+
+	window.reportTest && window.reportTest('math', { hash: $hash, validMath, invalidMath, engine: [...browser] })
 })()

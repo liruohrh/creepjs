@@ -376,4 +376,6 @@ patch(rectEl, html`
 		</div>
 	</div>
 `)
+
+window.reportTest && window.reportTest('domrect', { rectHash, lieHash, lieLen, score, valid, rect, matrixRect, unShiftRect })
 })()

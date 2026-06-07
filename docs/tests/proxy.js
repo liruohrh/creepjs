@@ -248,4 +248,6 @@
 	</div>
 `)
 
+  window.reportTest && window.reportTest('proxy', { hash, results, perfDiff })
+
 })()

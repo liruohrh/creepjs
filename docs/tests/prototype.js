@@ -846,4 +846,14 @@
 		</div>
 	</div>
 `)
+
+	window.reportTest && window.reportTest('prototype', {
+		lieList,
+		lieDetail,
+		lieCount,
+		propsSearched,
+		searchedHash,
+		corruptedHash,
+		lieHash
+	})
 })()

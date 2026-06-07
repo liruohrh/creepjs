@@ -573,7 +573,43 @@ import getBestWorkerScope, { Scope, spawnWorker, workerScopeHTML } from './worke
 	const [fpHash, creepHash] = await Promise.all([hashify(fp), hashify(creep)]).catch((error) => {
 		console.error(error.message)
 	}) || []
-	
+
+	// When index.html is accessed with a `uuid` query param, build a reportId
+	// of the form `${fingerprint}_${uuid}` and post detection data to the server.
+	// The same reportId is appended to the test links so each test reports too.
+  type ReportTestFunction = (name: string, data: any, options?: { reportId?: string, reportAuto?: boolean }) => void
+  // @ts-ignore
+  const reportTest = window.reportTest as (ReportTestFunction | undefined);
+  let reporter: {
+    reportQuery: string,
+    sendReport: ReportTestFunction,
+  } | null = null
+  if (reportTest) {
+    const pageQuery = new URLSearchParams(window.location.search);
+    const reportUUID = pageQuery.get('uuid')
+    const reportAuto = pageQuery.has('auto')
+    const reportId = reportUUID ? `${creepHash}_${reportUUID}` : ""
+
+    // reportQuery is only set when there's a reportId — used to append params to test links
+    let reportQuery = ""
+    if (reportId) {
+      const query = new URLSearchParams({ reportId })
+      if (reportAuto) {
+        query.set('auto', 'true')
+      }
+      reportQuery = query.toString()
+    }
+
+    // sendReport is always available when reportTest exists,
+    // so data gets saved to DOM <script type="application/json"> even without a reportId
+    reporter = {
+      reportQuery,
+      sendReport: (name: string, data: any) => {
+        reportTest(name, data, reportId ? { reportId, reportAuto } : {})
+      },
+    }
+  }
+
 	const blankFingerprint = '0000000000000000000000000000000000000000000000000000000000000000'
 	const el = document.getElementById('fingerprint-data')
 	patch(el, html`
@@ -692,8 +728,31 @@ import getBestWorkerScope, { Scope, spawnWorker, workerScopeHTML } from './worke
 			getWebRTCData(),
 			getWebRTCDevices(),
 			getStatus(),
-		]).then(async (data) => {
+		])
+		.then(data => data || [])
+		.catch((err) => {
+			console.error(err)
+			return `get other failed: ${err}`
+		}).then((data) => {
+			const creepjs = {
+				fingerprint: {id: fpHash, fuzzyId: fuzzyFingerprint, ...JSON.parse(JSON.stringify(fp))},
+				creep: {id: creepHash, ...JSON.parse(JSON.stringify(creep))},
+			};
+			if(typeof data === "string") {
+				reporter?.sendReport('creepjs', {
+					...creepjs,
+					indexOther: { error: data }
+				})
+				return
+			}
 			const [webRTC, mediaDevices, status] = data || []
+			reporter?.sendReport('creepjs', {
+				...creepjs,
+				indexOther: JSON.parse(JSON.stringify({
+					webRTC, mediaDevices, status
+				}))
+			})
+			
 			patch(document.getElementById('webrtc-connection'), html`
 				<div class="flex-grid visitor-info">
 					${webrtcHTML(webRTC, mediaDevices)}
@@ -704,7 +763,7 @@ import getBestWorkerScope, { Scope, spawnWorker, workerScopeHTML } from './worke
 					${statusHTML(status)}
 				</div>
 			`)
-		}).catch((err) => console.error(err))
+		})
 
 		// expose results to the window
 		// @ts-expect-error does not exist
@@ -730,4 +789,10 @@ import getBestWorkerScope, { Scope, spawnWorker, workerScopeHTML } from './worke
 			`)
 		}, 50)
 	})
+
+  if(reporter?.reportQuery) {
+    // make other page can report data
+    [...document.querySelectorAll<HTMLAnchorElement>("#fingerprint-data a.tests")]
+      .forEach((link) => link.href += "?" + reporter.reportQuery)
+  }
 }()

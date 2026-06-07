@@ -849,4 +849,16 @@
 	</div>
 	`
 	)
+
+	window.reportTest && window.reportTest('timezone', {
+		locationHash,
+		timeZone,
+		computedLocation: [...epochCitySet],
+		timezoneOffset,
+		zone,
+		valid,
+		protection,
+		precision,
+		precisionValue
+	})
 })()
